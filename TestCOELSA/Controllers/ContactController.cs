@@ -26,7 +26,7 @@ namespace TestCOELSA.Controllers
         public ActionResult<List<Contact>> GetAll([FromQuery] GetAllDto getAllDto)
         {
             try
-            {
+            {         
                 return dbServices.getContacts(getAllDto.PageIndex, getAllDto.PageSize);
             }
             catch (Exception ex)
@@ -41,14 +41,18 @@ namespace TestCOELSA.Controllers
         {
             try
             {
+                var validation = Bussiness.validateContact(contact);
+
+                if (!validation.Item1)
+                    return BadRequest(validation.Item2);
+
                 return dbServices.create(contact);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError(ex.ToString());                
                 return StatusCode(500);
             }
-            return new Contact();
         }
 
         [HttpPost("{id}")]
@@ -56,6 +60,11 @@ namespace TestCOELSA.Controllers
         {
             try
             {
+                var validation = Bussiness.validateContact(contact);
+
+                if (!validation.Item1)
+                    return BadRequest(validation.Item2);
+
                 return dbServices.update(contact, id);
             }
             catch (Exception ex)
@@ -66,7 +75,7 @@ namespace TestCOELSA.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Create( [FromRoute] int id)
+        public ActionResult Delete( [FromRoute] int id)
         {
             try
             {
@@ -86,4 +95,6 @@ namespace TestCOELSA.Controllers
         public int PageIndex { get; set; }
         public int PageSize { get; set; } = 2;
     }
+
+ 
 }

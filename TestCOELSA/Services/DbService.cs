@@ -93,5 +93,25 @@ namespace TestCOELSA.Services
             if (connection.State == ConnectionState.Open)
                 connection.Close();
         }
+
+
+     
+    }
+
+    public class BussinessException : Exception
+    {
+        public BussinessException()
+        {
+        }
+
+        public BussinessException(string message)
+            : base(message)
+        {
+        }
+
+        public BussinessException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
     }
 }
